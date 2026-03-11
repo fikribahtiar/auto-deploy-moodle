@@ -3,16 +3,15 @@ pipeline {
 
     stages {
 
-        stage('Clone Repo') {
-            steps {
-                git branch: 'main', url: 'https://github.com/fikribahtiar/auto-deploy-moodle.git'
-            }
-        }
-
-        stage('Deploy to Server') {
+        stage('Deploy') {
             steps {
                 sh """
-                ssh root@192.168.56.2 'bash -s' < deploy.sh
+                ssh root@192.168.56.2 '
+                cd /opt/moodle || exit
+                git pull origin main || git clone https://github.com/fikribahtiar/auto-deploy-moodle.git /opt/moodle
+                cd /opt/moodle
+                docker compose up -d
+                '
                 """
             }
         }
