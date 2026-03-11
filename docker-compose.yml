@@ -1,7 +1,7 @@
 services:
 
   db:
-    image: postgres:latest
+    image: postgres:15
     restart: always
     environment:
       POSTGRES_DB: moodle
@@ -11,18 +11,21 @@ services:
       - db_data:/var/lib/postgresql/data
 
   moodle:
-    image: bitnami/moodle:4.5
+    build: .
     restart: always
     ports:
-      - "8080:8080"
-    environment:
-      MOODLE_DATABASE_TYPE: pgsql
-      MOODLE_DATABASE_HOST: db
-      MOODLE_DATABASE_NAME: moodle
-      MOODLE_DATABASE_USER: moodle
-      MOODLE_DATABASE_PASSWORD: moodle
+      - "8080:80"
     depends_on:
       - db
+    environment:
+      MOODLE_DB_TYPE: pgsql
+      MOODLE_DB_HOST: db
+      MOODLE_DB_NAME: moodle
+      MOODLE_DB_USER: moodle
+      MOODLE_DB_PASS: moodle
+    volumes:
+      - moodledata:/var/moodledata
 
 volumes:
   db_data:
+  moodledata:
