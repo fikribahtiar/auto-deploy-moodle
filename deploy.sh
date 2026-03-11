@@ -1,26 +1,21 @@
 #!/bin/bash
 
-SERVER_DIR=/opt/moodle
+APP_DIR=/opt/moodle
 
-if ! command -v docker &> /dev/null
-then
-    echo "Install Docker..."
-    curl -fsSL https://get.docker.com | sh
+echo "Create directory"
+mkdir -p $APP_DIR
+
+cd $APP_DIR
+
+if [ ! -d ".git" ]; then
+    echo "Clone repo"
+    git clone https://github.com/fikribahtiar/auto-deploy-moodle.git .
+else
+    echo "Pull latest code"
+    git pull origin main
 fi
 
-if ! command -v docker compose &> /dev/null
-then
-    apt install docker-compose-plugin -y
-fi
-
-mkdir -p $SERVER_DIR
-cd $SERVER_DIR
-
-if [ ! -d "moodle" ]; then
-    git clone -b MOODLE_500_STABLE https://github.com/moodle/moodle.git
-fi
-
-cd moodle
+echo "Run docker compose"
 
 docker compose down
 docker compose up -d
