@@ -16,6 +16,12 @@ pipeline {
                 fi
 
                 cd /opt/moodle
+
+                echo "Pull images..."
+                docker pull postgres:15
+                docker pull bitnami/moodle
+
+                echo "Start containers..."
                 docker compose up -d
                 '
                 """
