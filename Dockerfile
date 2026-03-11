@@ -32,3 +32,5 @@ RUN mkdir -p /var/moodledata
 
 RUN chown -R www-data:www-data /var/moodledata \
     && chmod -R 777 /var/moodledata
+
+COPY php.ini /usr/local/etc/php/
