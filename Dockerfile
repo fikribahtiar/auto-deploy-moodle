@@ -15,3 +15,7 @@ WORKDIR /var/www/html
 RUN git clone --branch MOODLE_405_STABLE https://github.com/moodle/moodle.git .
 
 RUN chown -R www-data:www-data /var/www/html
+RUN mkdir -p /var/moodledata
+
+RUN chown -R www-data:www-data /var/moodledata \
+    && chmod -R 777 /var/moodledata
