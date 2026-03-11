@@ -7,8 +7,14 @@ pipeline {
             steps {
                 sh """
                 ssh root@192.168.56.2 '
-                cd /opt/moodle || exit
-                git pull origin main || git clone https://github.com/fikribahtiar/auto-deploy-moodle.git /opt/moodle
+                if [ ! -d /opt/moodle/.git ]; then
+                    rm -rf /opt/moodle
+                    git clone https://github.com/fikribahtiar/auto-deploy-moodle.git /opt/moodle
+                else
+                    cd /opt/moodle
+                    git pull origin main
+                fi
+
                 cd /opt/moodle
                 docker compose up -d
                 '
